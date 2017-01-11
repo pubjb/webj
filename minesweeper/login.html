@@ -18,19 +18,43 @@
 
 <script>
 
-//로그인 정보 저장. 아이디 정보는 로컬저장소 'user_id'로 기록.
-if(localStorage.getItem('user_id') != null) {
+/*
+  로그인 정보 저장. 현재 접속한 아이디는 로컬스토리지의 currentId 에 저장.
+  아이디에 해당하는 정보들은 따로 저장되어 있음
+  예를 들어 ID가 '안녕'이라면 안녕의 rank는
+  localStorage.getItem('안녕').user_rank 에 있다.
+*/
+if(localStorage.getItem('currentId') != null) {
+    userDataCheck(currentId);
     document.location.href="mainMenu.html";
-
     //아래 문구는 테스트용
-    alert("로그인 정보가 있으므로 바로 메인메뉴로 이동. \n저장된 로그인 아이디 : "+localStorage.getItem('user_id'));
+    alert("로그인 정보가 있으므로 바로 메인메뉴로 이동합니다. \n저장된 로그인 아이디 : "+localStorage.getItem('currentId'));
 }
 
 
+function userDataCheck(currentId){
+    if(localStorage.getItem(currentId) != null){
+        return;
+    }else{
+        alert("유저 데이터가 없습니다.\n유저 정보를 새로 생성합니다.")
+        var rankData = "0,0,0"
+        /*rankData의 첫번째 값은 rank(랭크)
+                     두번째 값은 bestTime(최고기록) 
+                     세번째 값은 currentSkin(현재스킨번호)
+          요렇게 하면 어떨까 싶습니다. 객체로 저장하고 싶은데 객체인식을 못하네요... 문자열로만 된대요.
+          객체를 쓰려면 스토리지 인터페이스를 확장시켜야된다는데 굳이 그래야 하나 싶어서 그냥 숫자로...
+          받아서 쓸때는 split 활용해서 하면 될거같습니다.
+          예를 들어 var userData = localStorage.getItem(ID).split(","); 요런식으로... 
+        */
+        localStorage.setItem(currentId,rankData);
+    }
+}
+
 //로그인 메서드. 버튼을 누를 시 동작한다.
 function login() {
-    var getIdText = document.idForm;
-    localStorage.setItem('user_id', idForm.user_id.value);
+    var input_id = idForm.input_id.value
+    localStorage.setItem('currentId', idForm.input_id.value);
+    userDataCheck(idForm.input_id.value);
     document.location.href="mainMenu.html";
 }
 
@@ -50,8 +74,8 @@ localStorage.setItem('test2','456');
     <form name="idForm" action="mainMenu.html" method="POST">
         <div class="floater"></div>
         <div class="box">
-            <input type="text" class="iText" name="user_id" value="아이디를 입력하세요" maxlength="15">
-        <input type="button" class="btn" value="완료" onclick="login()" style="width:100px; height:50px;">
+            <input type="text" class="iText" name="input_id" placeholder="아이디를 입력하세요" maxlength="15">
+        <input type="button" class="btn" value="로그인" onclick="login()" style="width:100px; height:50px;">
         </div>
     </form>
     

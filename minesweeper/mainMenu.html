@@ -10,8 +10,17 @@
 .logoutBtn { padding:10px; border-radius:7px; font-size:12px;
              color: #fff; text-align:center; background:#628ee3}
 </style>
-
 <script>
+
+const ID       = localStorage.getItem('currentId'); // 현재 접속한 아이디
+const rankList = ["브론즈", "실버", "골드", "다이아", "플래티넘", "챌린저"]; //랭크 이름
+
+//유저 정보 읽어오기
+var userData     = localStorage.getItem(ID).split(",");
+var rank         = userData[0];
+var best_time    = userData[1];
+var current_skin = userData[2];  
+
 
 //이동 메서드
 function move(page) {
@@ -24,7 +33,7 @@ function move(page) {
 //로그아웃 메서드
 function logout() {
     if(confirm("로그아웃 하시겠습니까?")) {
-        localStorage.removeItem('user_id');
+        localStorage.removeItem('currentId');
         document.location.href="login.html";
     }
 }
@@ -33,7 +42,8 @@ function logout() {
 
 //화면로딩 후 로컬저장소에서 아이디 불러오기
 window.onload=function() {
-    document.getElementById("userIdView").innerHTML = "<h2>"+localStorage.getItem('user_id')+"</h2>";
+    document.getElementById("userIdView").innerHTML = "<h2>"+ID+"</h2>";
+     document.getElementById("rankView").innerHTML  = "<br><h3>현재 랭크 : "+rankList[rank]+"</h3>";
 }
 
 /*localStorage 사용 예제
@@ -56,11 +66,12 @@ alert(localStorage.getItem('test2'));
 <div class="content" style="text-align:center;">
     <h5>사용자 아이디</h5>
     <span id="userIdView"></span>
+    <span id="rankView"></span>
     <br><br>
 <!--연습하기 버튼-->
     <input type="button" class="selectBtn" id="training" value="연습하기" onclick="move(this.id)" style="width:180px; height:70px;">
     <br><br><br><br>
-<!--도전하기 버튼-->
+<!--챌린지모드 버튼-->
     <input type="button" class="selectBtn" id="challenge" value="챌린지모드" onclick="move(this.id)" style="width:180px; height:70px;">
 </div>
 
