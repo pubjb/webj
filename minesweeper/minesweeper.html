@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-
+ 
     <style>
     .block {
         width:30px;
@@ -23,7 +23,7 @@
         width:30px;
         height:30px;
         border:solid 0;
-        background-image:url('../imgs/qmark.jpg');
+        background-image:url('./imgs/qmark.jpg');
         background-size: 30px 30px;
     }
     .num0 {width:30px; height:30px; border:0px; }
@@ -36,65 +36,94 @@
     .num7 {width:30px; height:30px; border:0px; color:#aa0021}
     .num8 {width:30px; height:30px; border:0px; color:#aa0021}    
     </style>
-
+ 
     <script>
     // 전역 변수 초기화
-    const MINE = -1;
-    const NOTHING_AROUND = 0;
-    var rowNum = 0;
-    var colnum = 0;
-    var mineCount = 0;
-    var board;
-
+    const MINE = -1; //지뢰
+    const NOTHING_AROUND = 0; //주위에 아무것도 없다..
+    var rowNum = 0; //행 번호
+    var colnum = 0; //열 번호
+    var mineCount = 0; // 지뢰 숫자
+    var board; // 지뢰 맵
+    var time; // 시간
+    var inter; //interval
+ 
     window.onload = function() {
-        selectLevel("level1");
+//         selectLevel("level1");
+        
     }
-
+ 
     function selectLevel(level) {
         switch(level) {
         case "level1":
-            rowNum = 9;
-            colNum = 9;
-            mineCount = 10;
+            rowNum = 16;
+            colNum = 30;
+            mineCount = 99;
+            time=240;
+            inter = setInterval(countDown,1000);
             break;
         case "level2":
             rowNum = 16;
-            colNum = 16;
-            mineCount = 40;
+            colNum = 30;
+            mineCount = 99;
+            time=210;
+            inter = setInterval(countDown,1000);
             break;
         case "level3":
             rowNum = 16;
             colNum = 30;
             mineCount = 99;
+            time=180;
+            inter = setInterval(countDown,1000);
             break;
-        default:
-            rowNum = 10;
-            colNum = 10;
-            mineCount = 10;
+        case "level4":
+            rowNum = 16;
+            colNum = 30;
+            mineCount = 99;
+            time=150;
+            inter = setInterval(countDown,1000);
+            break;
+        case "level5":
+            rowNum = 16;
+            colNum = 30;
+            mineCount = 99;
+            time=120;
+            inter = setInterval(countDown,1000);
             break;
         }
-
+ 
         reset();
     }
-
-
+    
+	function countDown(){
+		time--;
+		document.getElementById("restTime").innerHTML=time;	
+		if(time==0){
+			 
+			alert("YOU DIED");
+			clearInterval(inter);
+			
+		}
+	}
+ 
+ 
     function reset() {
         // board 초기화
         board = new Array(rowNum);
-
+ 
         for (var row = 0; row < rowNum; row++) {
             board[row] = new Array(colNum);
-
+ 
             for (var col=0; col < colNum; col++) {
                 board[row][col] = 0;
             }
         }
-
+ 
         // 지뢰 설치
         for (var i = 0; i < mineCount; i++) {
             var row = Math.floor(Math.random() * rowNum);
             var col = Math.floor(Math.random() * colNum);
-
+ 
             if (board[row][col] == MINE) {
                 i--;
                 continue;
@@ -102,11 +131,11 @@
                 board[row][col] = MINE;
             }
         }
-
+ 
         // 주위 지뢰 개수 표시
         for (var row = 0; row < rowNum; row++) {
             for (var col = 0; col < colNum; col++) {
-
+ 
                 if (board[row][col] != MINE) {
                     for (var i = -1; i <= 1; i++) {
                         for (var j = -1; j <= 1; j++) {
@@ -114,7 +143,7 @@
                                 col + j < 0 || col + j > (colNum -1)) {
                                 continue;
                             }
-
+ 
                             if (board[row + i][col + j] == MINE) {
                                 board[row][col]++;
                             }
@@ -123,39 +152,39 @@
                 }
             }
         }
-
+ 
         // 버튼 생성
         var html = "";
-
+ 
         for (var row = 0; row < rowNum; row++) {
             for (var col = 0; col < colNum; col++) {
                 html += "<input type='button' id=";
                 html += row + "," + col + " onclick='leftClick(this.id)' onmousedown='rightClick(this.id)' oncontextmenu='return false' class='block'>";
             }
-
+ 
             html += "<br>";
         }
-
-        // debug용
-        html += "<br><br>";
-        for (var row = 0; row < rowNum; row++) {
-            for (var col = 0; col < colNum; col++) {
-                html += board[row][col] + " ";
-            }
-            html += "<br>";
-        }
-        // debug용
-
+ 
+//         // debug용
+//         html += "<br><br>";
+//         for (var row = 0; row < rowNum; row++) {
+//             for (var col = 0; col < colNum; col++) {
+//                 html += board[row][col] + " ";
+//             }
+//             html += "<br>";
+//         }
+//         // debug용
+ 
         document.getElementById("mineMap").innerHTML = html;
-    }
-
-
+     }//reset()
+ 
+ 
     function leftClick(id) {
         var button = document.getElementById(id);
         var coord = id.split(",");
         var row = parseInt(coord[0]);
         var col = parseInt(coord[1]);
-
+ 
         // 왼클릭
         if (true/*event.button == 0*/) {
             if (button.className == 'block' || button.className == 'qmark') {
@@ -173,7 +202,7 @@
                                     col + j < 0 || col + j > (colNum - 1)) {
                                     continue;
                                 }
-
+ 
                                 if (document.getElementById((row + i) + "," + (col + j)).className == "block" &&
                                     board[row + i][col + j] != MINE) {
                                         leftClick((row + i) + "," + (col + j));
@@ -187,13 +216,13 @@
             }
         } // 왼클릭
     }
-
+ 
     function rightClick(id) {
         var button = document.getElementById(id);
         var coord = id.split(",");
         var row = parseInt(coord[0]);
         var col = parseInt(coord[1]);
-
+ 
         // 오른클릭
         if (event.button == 2) {
             if (button.className == "block") {
@@ -208,7 +237,7 @@
         // 훨버튼
         else if (event.button == 1) {
             var flagCount = 0;
-
+ 
             if (button.className.match("num")) {
                 for (var i = -1; i <= 1; i++) {
                     for (var j = -1; j <= 1; j++) {
@@ -216,13 +245,13 @@
                             col + j < 0 || col + j > (colNum - 1)) {
                             continue;
                         }
-
+ 
                         if (document.getElementById((row + i) + "," + (col + j)).className == "flag") {
                             flagCount++;
                         }
                     }
                 }
-
+ 
                 if (board[row][col] == flagCount) {
                     for (var i = -1; i <= 1; i++) {
                         for (var j = -1; j <= 1; j++) {
@@ -230,10 +259,10 @@
                                 col + j < 0 || col + j > (colNum - 1)) {
                                 continue;
                             }
-
+ 
                             if (document.getElementById((row + i) + "," + (col + j)).className == "block") {
                                 leftClick((row + i) + "," + (col + j));
-
+ 
                                 //휠버튼 button.event 처리해주기 밥처먹고하기 
                             }
                         }
@@ -242,32 +271,38 @@
             }
         } // 휠버튼
     }
-
-
+ 
+ 
     </script>
 </head>
 <body>
-
+ 
     <table border="1px solid" style="text-align:center;">
         <tr>
-            <td><input type="button" id="level1" value="초급" style="width:120px; height:40px" onclick="selectLevel(this.id);"></td>
-            <td><input type="button" id="level2" value="중급" style="width:120px; height:40px" onclick="selectLevel(this.id);"></td>
-            <td><input type="button" id="level3" value="고급" style="width:120px; height:40px" onclick="selectLevel(this.id);"></td>
+            <td><input type="button" id="level1" value="BRONZE" style="width:120px; height:40px" onclick="selectLevel(this.id);"></td>
+            <td><input type="button" id="level2" value="SILVER" style="width:120px; height:40px" onclick="selectLevel(this.id);"></td>
+            <td><input type="button" id="level3" value="GOLD" style="width:120px; height:40px" onclick="selectLevel(this.id);"></td>
+            <td><input type="button" id="level4" value="PLATINUM" style="width:120px; height:40px" onclick="selectLevel(this.id);"></td>
+            <td><input type="button" id="level5" value="DIAMOND" style="width:120px; height:40px" onclick="selectLevel(this.id);"></td>
         </tr>
         <tr>
-            <td colspan="3"><div id="mineMap"></div></td>
+            <td colspan="5"><div id="mineMap"></div></td>
         </tr>
         <tr>
             <td>지뢰 갯수</td>
             <td>진행 시간</td>
             <td>남은 블록 수</td>
+            <td>내 등급</td>
+            <td>내 아이디</td>
         </tr>
         <tr>
             <td><span id="mineCntView"></span></td>
+            <td id="restTime"></td>
+            <td></td>
             <td></td>
             <td></td>
         </tr>
-
+ 
     </table>
     
 </body>
