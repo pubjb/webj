@@ -8,33 +8,33 @@
     .block {
         width:30px;
         height:30px;
-        border:solid 0;
-        background-image:url('imgs/block.jpg');
+        border-style: outset;
+        background-image:url('../imgs/block.jpg');
         background-size: 30px 30px;
     }
     .flag {
         width:30px;
         height:30px;
-        border:solid 0;
-        background-image:url('imgs/flag.jpg');
+        border-style: outset;
+        background-image:url('../imgs/flag.png');
         background-size: 30px 30px;
     }
     .qmark {
         width:30px;
         height:30px;
-        border:solid 0;
-        background-image:url('imgs/qmark.jpg');
+        border-style: outset;
+        background-image:url('../imgs/qmark.png');
         background-size: 30px 30px;
     }
-    .num0 {width:30px; height:30px; border:0px; }
-    .num1 {width:30px; height:30px; border:0px; color:blue}
-    .num2 {width:30px; height:30px; border:0px; color:green}
-    .num3 {width:30px; height:30px; border:0px; color:red}
-    .num4 {width:30px; height:30px; border:0px; color:purple}
-    .num5 {width:30px; height:30px; border:0px; color:#aa0021}
-    .num6 {width:30px; height:30px; border:0px; color:#aa0021}
-    .num7 {width:30px; height:30px; border:0px; color:#aa0021}
-    .num8 {width:30px; height:30px; border:0px; color:#aa0021}
+    .num0 {width:30px; height:30px; border-style: inset; background-color: silver}
+    .num1 {width:30px; height:30px; border-style: inset; background-color: silver; color:blue}
+    .num2 {width:30px; height:30px; border-style: inset; background-color: silver; color:green}
+    .num3 {width:30px; height:30px; border-style: inset; background-color: silver; color:red}
+    .num4 {width:30px; height:30px; border-style: inset; background-color: silver; color:purple}
+    .num5 {width:30px; height:30px; border-style: inset; background-color: silver; color:#aa0021}
+    .num6 {width:30px; height:30px; border-style: inset; background-color: silver; color:#aa0021}
+    .num7 {width:30px; height:30px; border-style: inset; background-color: silver; color:#aa0021}
+    .num8 {width:30px; height:30px; border-style: inset; background-color: silver; color:#aa0021}
     </style>
 
     <script>
@@ -130,7 +130,7 @@
         for (var row = 0; row < rowNum; row++) {
             for (var col = 0; col < colNum; col++) {
                 html += "<input type='button' id=";
-                html += row + "," + col + " onclick='leftClick(this.id)' onmousedown='rightClick(this.id)' oncontextmenu='return false' class='block'>";
+                html += row + "," + col + " onclick='leftClick(this.id)' value=' ' onmousedown='rightClick(this.id)' oncontextmenu='return false' class='block'>";
             }
 
             html += "<br>";
