@@ -9,16 +9,17 @@
 -->
 
 <style>
-.floater    { float: left; height: 50%; margin-bottom: -120px;}
+@import url(http://fonts.googleapis.com/earlyaccess/jejuhallasan.css);
+.floater    { float: left; height: 30%; margin-bottom: -120px;}
 .box        { clear: both; width:326px; position:relative;}
 .box .iText { width:300px; margin:3px 0; padding:10px 12px; border:1px solid #aaa }
-.btn        { padding:10px; border-radius:7px; font-size:14px;
-              color: #fff; text-align:center; background:#333}
+.btn        { padding:10px; border-radius:7px; font-size:20px; font-family: 'Jeju Hallasan';
+              color: white; text-align:center; background:#0066ff}
+body      {font-size:150px; font-family: 'Jeju Hallasan', cursive;}              
+              
 </style>
 
 <script>
-
-//로그인 정보 저장. 아이디 정보는 로컬저장소 'user_id'로 기록.
 if(localStorage.getItem('user_id') != null) {
     document.location.href = "mainMenu.html";
 
@@ -34,7 +35,6 @@ function login() {
     document.location.href="mainMenu.html";
 }
 
-
 /*localStorage 사용 예제
 localStorage.test = '123;';
 localStorage.setItem('test2','456');
@@ -43,6 +43,8 @@ localStorage.setItem('test2','456');
  
 </head>
 <body>
+<center>지뢰 찾기</center>
+
 
 <!--사용자 이름을 입력받는 폼. 입력받은 값을 쿠키에 저장하고 메인메뉴 페이지로 넘어간다.-->
 
