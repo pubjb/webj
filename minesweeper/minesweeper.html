@@ -24,18 +24,18 @@
         width:30px;
         height:30px;
         border-style: outset;
-        background-image:url('../imgs/qmark.png');
+        background-image:url('../imgs/qmark.png'); 
         background-size: 30px 30px;
     }
-    .num0 {width:30px; height:30px; border-style: inset; background-color: silver}
-    .num1 {width:30px; height:30px; border-style: inset; background-color: silver; color:blue}
-    .num2 {width:30px; height:30px; border-style: inset; background-color: silver; color:green}
-    .num3 {width:30px; height:30px; border-style: inset; background-color: silver; color:red}
-    .num4 {width:30px; height:30px; border-style: inset; background-color: silver; color:purple}
-    .num5 {width:30px; height:30px; border-style: inset; background-color: silver; color:#aa0021}
-    .num6 {width:30px; height:30px; border-style: inset; background-color: silver; color:#aa0021}
-    .num7 {width:30px; height:30px; border-style: inset; background-color: silver; color:#aa0021}
-    .num8 {width:30px; height:30px; border-style: inset; background-color: silver; color:#aa0021}
+    .num0 {width:30px; height:30px; border-style: inset; font-size: 15px; font-family: 'Jeju Hallasan'; background-color: silver}
+    .num1 {width:30px; height:30px; border-style: inset; font-size: 15px; font-family: 'Jeju Hallasan'; background-color: silver; color:blue}
+    .num2 {width:30px; height:30px; border-style: inset; font-size: 15px; font-family: 'Jeju Hallasan'; background-color: silver; color:green}
+    .num3 {width:30px; height:30px; border-style: inset; font-size: 15px; font-family: 'Jeju Hallasan'; background-color: silver; color:red}
+    .num4 {width:30px; height:30px; border-style: inset; font-size: 15px; font-family: 'Jeju Hallasan'; background-color: silver; color:purple}
+    .num5 {width:30px; height:30px; border-style: inset; font-size: 15px; font-family: 'Jeju Hallasan'; background-color: silver; color:#aa0021}
+    .num6 {width:30px; height:30px; border-style: inset; font-size: 15px; font-family: 'Jeju Hallasan'; background-color: silver; color:#aa0021}
+    .num7 {width:30px; height:30px; border-style: inset; font-size: 15px; font-family: 'Jeju Hallasan'; background-color: silver; color:#aa0021}
+    .num8 {width:30px; height:30px; border-style: inset; font-size: 15px; font-family: 'Jeju Hallasan'; background-color: silver; color:#aa0021}
 
     .btn {
         font-family: 'Jeju Hallasan';
@@ -63,6 +63,7 @@
     var userMine;
     var blockCount = 0;
     var currentLevel = 0;
+    var isEnded = false;
 
     window.onload = function() {
         selectLevel("level1");
@@ -105,6 +106,7 @@
         isStarted = false;
         blockCount = rowNum * colNum;
         userMineCount = mineCount;
+        isEnded = false;
         clearInterval(interval);
 
         // board 초기화
@@ -193,11 +195,6 @@
 
 
     function leftClick(id) {
-        // 재귀 호출로 leftClick 호출 될시 버그가 있음. 일단 땜빵
-        if (blockCount == 0) {
-            return;
-        }
-
         var button = document.getElementById(id);
         var coord = id.split(",");
         var row = parseInt(coord[0]);
@@ -214,8 +211,12 @@
 
         if (button.className == 'block' || button.className == 'qmark') {
             if (board[row][col] == MINE) {
+                isEnded = true;
                 alert("지뢰임");   // 휠클릭시 버그 재귀호출된 leftClick 이 마주 호출된다
-                reset();
+                if (event.button == 0) {
+                    reset();
+                }
+                
             } else {
                 var att = document.createAttribute("class");
                 att.value = "num" + board[row][col];
@@ -243,12 +244,14 @@
                     blockCount--;
                     console.log("blockCount : " + blockCount);
                 }
+
+                if (blockCount == 0) {
+                    checkSuccess();
+                }
             }
         }
 
-        if (blockCount == 0) {
-            checkSuccess();
-        }
+        
     }
 
     function checkSuccess() {
@@ -268,9 +271,10 @@
         }
 
         if (count == mineCount) {
+            isEnded = true;
             clearInterval(interval);
 
-            var name = prompt(sec + "초 영웅의 이름을 넣어주세요", "아무개");
+            var name = prompt("와우!! " + sec + "초를 기록하셨습니다~ \n영웅의 이름을 넣어주세요", "아무개");
             var records = JSON.parse(localStorage.getItem("" + currentLevel));
 
             if (records) {
@@ -356,8 +360,12 @@
                 }
 
                 if (board[row][col] == flagCount) {
-                    for (var i = -1; i <= 1; i++) {
+                    ended: for (var i = -1; i <= 1; i++) {
                         for (var j = -1; j <= 1; j++) {
+                            if (isEnded) {
+                                break ended;
+                            }
+
                             if (row + i < 0 || row + i > (rowNum - 1) ||
                                 col + j < 0 || col + j > (colNum - 1)) {
                                 continue;
@@ -368,7 +376,12 @@
                             }
                         }
                     }
-                }
+
+                    if (isEnded) {
+                        reset();
+                    }
+                }   //
+                
             }
         } // 휠버튼
     }
