@@ -62,9 +62,10 @@
     var interval;
     var userMine;
     var blockCount = 0;
+    var currentLevel = 0;
 
     window.onload = function() {
-        selectLevel("level2");
+        selectLevel("level1");
     }
 
     function selectLevel(level) {
@@ -73,21 +74,25 @@
             rowNum = 9;
             colNum = 9;
             mineCount = 10;
+            currentLevel = 1;
             break;
         case "level2":
             rowNum = 16;
             colNum = 16;
             mineCount = 40;
+            currentLevel = 2;
             break;
         case "level3":
             rowNum = 16;
             colNum = 30;
             mineCount = 99;
+            currentLevel = 3;
             break;
         default:
             rowNum = 10;
             colNum = 10;
             mineCount = 10;
+            currentLevel = 0;
             break;
         }
 
@@ -100,6 +105,7 @@
         isStarted = false;
         blockCount = rowNum * colNum;
         userMineCount = mineCount;
+        clearInterval(interval);
 
         // board 초기화
         board = new Array(rowNum);
@@ -187,6 +193,11 @@
 
 
     function leftClick(id) {
+        // 재귀 호출로 leftClick 호출 될시 버그가 있음. 일단 땜빵
+        if (blockCount == 0) {
+            return;
+        }
+
         var button = document.getElementById(id);
         var coord = id.split(",");
         var row = parseInt(coord[0]);
@@ -204,7 +215,6 @@
         if (button.className == 'block' || button.className == 'qmark') {
             if (board[row][col] == MINE) {
                 alert("지뢰임");   // 휠클릭시 버그 재귀호출된 leftClick 이 마주 호출된다
-                clearInterval(interval);
                 reset();
             } else {
                 var att = document.createAttribute("class");
@@ -236,7 +246,6 @@
             }
         }
 
-        // check
         if (blockCount == 0) {
             checkSuccess();
         }
@@ -252,7 +261,7 @@
                         count++;
                     } else {
                         alert("실패");
-                        clearInterval(interval);
+                        reset();
                     }
                 }
             }
@@ -260,8 +269,40 @@
 
         if (count == mineCount) {
             clearInterval(interval);
-            //alert("성공");
-            prompt(sec + "초 이름을 넣어주세요", "아무개");
+
+            var name = prompt(sec + "초 영웅의 이름을 넣어주세요", "아무개");
+            var records = JSON.parse(localStorage.getItem("" + currentLevel));
+
+            if (records) {
+                var isExist = false;
+                for (var i = 0; i < records.length; i++) {
+                    if (records[i].name == name) {
+                        if (records[i].sec > sec) {
+                            records[i].sec = sec;
+                            isExist = true;
+                        }
+                    }
+                }
+
+                if (!isExist) {
+                    var record = {};
+                    record.name = name;
+                    record.sec = sec;
+
+                    records.push(record);
+                }
+
+                localStorage.setItem("" + currentLevel, JSON.stringify(records));
+            } else {
+                var records = [];
+                var record = {};
+                record.name = name;
+                record.sec = sec;
+                records.push(record);
+                localStorage.setItem("" + currentLevel, JSON.stringify(records));
+            }
+
+            document.location.href="test.html";
         }
     }
 
