@@ -20,9 +20,9 @@
       .nps {font-family: 'Nanum Pen Script';}
 
 
-.number  {font-size:60px; font-family: 'Nanum Pen Script';}
-.name    {font-size:25px; color:#222; font-weight:500; font-family:'Nanum Brush Script';}
-.time    {font-size:23px; font-family: 'Nanum Pen Script';}
+.number  {font-size:70px; font-family: 'Nanum Pen Script';}
+.name    {font-size:35px; color:#222; font-weight:500; font-family:'Nanum Pen Script';}
+.time    {font-size:33px; color:#555; font-family:'Nanum Pen Script';}
 
 
 </style>
@@ -30,11 +30,6 @@
 
 
 //랭크데이타는 랭크페이지를 열때마다 새로 초기화해서 만드는게 낫겠다.
-/*
-var easyRankList = [];
-var normalRankList = [];
-var hardRankList = [];
-*/
 
 var rank4 = "user,300/";
 var rank1 = "지뢰초보,700/";
@@ -43,42 +38,56 @@ var rank3 = "팀장님,330/";
 var rank5 = "지뢰고수,400/";
 var rank6 = "일위,200/"
 
-localStorage.rankData = "";
+localStorage.easyRankData = "";
+localStorage.normalRankData = "";
+localStorage.hardRankData = "";
+localStorage.easyRankData += rank1;
+localStorage.easyRankData += rank2;
+localStorage.easyRankData += rank3;
+localStorage.easyRankData += rank4;
+localStorage.easyRankData += rank5;
+localStorage.easyRankData += rank6;
 
-localStorage.rankData += rank1;
-localStorage.rankData += rank2;
-localStorage.rankData += rank3;
-localStorage.rankData += rank4;
-localStorage.rankData += rank5;
-localStorage.rankData += rank6;
+localStorage.normalRankData += rank4;
+localStorage.normalRankData += rank5;
+localStorage.normalRankData += rank2;
 
-rankList = loadRankList();
+//데이터 테스트용
 
-rankList = sortData(rankList);
+
 
 window.onload=function(){
-var rankTable = document.getElementById("rankTable");
+ /*맨 처음 들어가면 일단 초급 난이도의 랭킹을 출력.
+    var rankList = [];
+    rankList = loadRankList(localStorage.getItem("easyRankData"));
+    rankList = sortData(rankList);
+    drawTopRank(rankList);
+    drawTable(rankList);
+*/
+}
 
-//Math.min(rankList.length, 10)
+//버튼 클릭 메서드
+function loadButtonClick(level) {
+    var rankList = [];
+    var data = level + "RankData";
+    //데이터이름은 easyRankData, normalRankData, hardRankData.
+    rankList = loadRankList(localStorage.getItem(data));
+    rankList = sortData(rankList);
     drawTopRank(rankList);
     drawTable(rankList);
 }
 
-//easyRankData
-//normalRankData
-//hardRankData   로컬스토리지는 이렇게 3개로 만들면 될듯.
 
 
 //로컬스토리지에 있는 데이터를 가져와 자르고
 //rankList에 해당 정보를 넣는 작업을 한다. splitData는 중간역할.
-function loadRankList(){
-    var rankList = [];
-    var splitData = (localStorage.rankData).split("/");
-    rankList = inputRankData(rankList, splitData);
+function loadRankList(localData){
+    var tempList = [];
+    var splitData = localData.split("/");
+    tempList = inputRankData(tempList, splitData);
 
-    return rankList;
+    return tempList;
 }
-
 
 //Rank Data를 rankList에 Push하는 메서드
 function inputRankData(rankList, splitData){
@@ -109,7 +118,7 @@ function sortData(rankList){
     //버블소트(올림차순)
     for(var i=0; i<rankList.length; i++){
         for(var j=0; j<rankList.length-1; j++){
-            if(rankList[j].time >rankList[j+1].time){
+            if(rankList[j].time > rankList[j+1].time){
                 temp = rankList[j];
                 rankList[j] = rankList[j+1];
                 rankList[j+1] = temp; 
@@ -122,6 +131,12 @@ function sortData(rankList){
 
 //1위를 맨 위에 띄우는 메서드
 function drawTopRank(rankList){
+    var topRank = document.getElementById("topRank");
+
+	while(topRank.rows.length > 1){
+		topRank.deleteRow(topRank.rows.length-1);
+	}
+
     var row = topRank.insertRow(1);
     var cell1 = row.insertCell(0);
     var cell2 = row.insertCell(1);
@@ -137,8 +152,18 @@ function drawTopRank(rankList){
 
 //랭킹테이블을 그리는 메서드. 6위까지만 띄웁니다.
 function drawTable(rankList){
+    var rankTable = document.getElementById("rankTable");
+
+	while(rankTable.rows.length > 1){
+		rankTable.deleteRow(rankTable.rows.length-1);
+	}
+
+
+
     for(var i=0; i< Math.min(rankList.length, 6); i++){
-        var row = rankTable.insertRow(i);
+        var rankTable = document.getElementById("rankTable");
+
+        var row = rankTable.insertRow(i+1);
         var cell1 = row.insertCell(0);
         var cell2 = row.insertCell(1);
         
@@ -173,14 +198,14 @@ function leadingZeros(n, digits) {
 
 <center>RANKING</center>
 <hr>
-<span>초급</span> 
-<span>중급</span> 
-<span>고급</span>
+<input type="button" id="easy"   value="초급"  onclick="loadButtonClick(this.id);">
+<input type="button" id="normal" value="중급" onclick="loadButtonClick(this.id);">
+<input type="button" id="hard"   value="고급"   onclick="loadButtonClick(this.id);">
 <hr>
 
 <table id="topRank" align="center">
     <tr>
-        <td width="80px"></td>
+        <td width="80px">　　　　　</td>
         <td>　　　　　　　　　　</td>
     </tr>  
 </table>
@@ -189,7 +214,7 @@ function leadingZeros(n, digits) {
 
 <table id="rankTable" align="center">
     <tr>
-        <td width="80px"></td>
+        <td width="80px">　　　　　</td>
         <td>　　　　　　　　　　</td>
     </tr>
 </table>
