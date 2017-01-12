@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>RANKING</title>
+
+<style>
+
+    @import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
+      @import url(http://fonts.googleapis.com/earlyaccess/nanumbrushscript.css);
+      @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+      @import url(http://fonts.googleapis.com/earlyaccess/nanumgothiccoding.css);
+      @import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
+      @import url(http://fonts.googleapis.com/earlyaccess/nanumpenscript.css);
+      .hn {font-family: 'Hanna';}
+      .nbs {font-family: 'Nanum Brush Script';}
+      .ng {font-family: 'Nanum Gothic';}
+      .ngc {font-family: 'Nanum Gothic Coding';}
+      .nm {font-family: 'Nanum Myeongjo';}
+      .nps {font-family: 'Nanum Pen Script';}
+
+
+.number  {font-size:60px; font-family: 'Nanum Pen Script';}
+.name    {font-size:25px; color:#222; font-weight:500; font-family:'Nanum Brush Script';}
+.time    {font-size:23px; font-family: 'Nanum Pen Script';}
+
+
+</style>
+<script>
+
+
+//랭크데이타는 랭크페이지를 열때마다 새로 초기화해서 만드는게 낫겠다.
+/*
+var easyRankList = [];
+var normalRankList = [];
+var hardRankList = [];
+*/
+
+var rank4 = "user,300/";
+var rank1 = "지뢰초보,700/";
+var rank2 = "반장님,300/";
+var rank3 = "팀장님,330/";
+var rank5 = "지뢰고수,400/";
+var rank6 = "일위,200/"
+
+localStorage.rankData = "";
+
+localStorage.rankData += rank1;
+localStorage.rankData += rank2;
+localStorage.rankData += rank3;
+localStorage.rankData += rank4;
+localStorage.rankData += rank5;
+localStorage.rankData += rank6;
+
+rankList = loadRankList();
+
+rankList = sortData(rankList);
+
+window.onload=function(){
+var rankTable = document.getElementById("rankTable");
+
+//Math.min(rankList.length, 10)
+    drawTopRank(rankList);
+    drawTable(rankList);
+}
+
+//easyRankData
+//normalRankData
+//hardRankData   로컬스토리지는 이렇게 3개로 만들면 될듯.
+
+
+//로컬스토리지에 있는 데이터를 가져와 자르고
+//rankList에 해당 정보를 넣는 작업을 한다. splitData는 중간역할.
+function loadRankList(){
+    var rankList = [];
+    var splitData = (localStorage.rankData).split("/");
+    rankList = inputRankData(rankList, splitData);
+
+    return rankList;
+}
+
+
+//Rank Data를 rankList에 Push하는 메서드
+function inputRankData(rankList, splitData){
+    for(var i=0; i<splitData.length-1; i++){
+        //마지막에 null데이터가 들어있어서 length-1만큼 반복합니다.
+        var inputData = splitData[i].split(",");
+        var nameData = inputData[0].trim();
+        var timeData = inputData[1];
+        var inputRank = {
+            name : nameData,
+            time : timeData
+            };
+        //이 위까지가 rankList에 넣을 데이터를 옮기기 위한 중간역할. 이렇게 해놓고
+        //push로 정보를 넣는다.
+            rankList.push(inputRank);
+    }
+    return rankList;
+}
+
+//버블소트 입니다... ㅎㅎ;;
+function sortData(rankList){
+    var temp = {
+        name : "",
+        time : 0
+        };
+    //자리변경 위한 임시 객체
+
+    //버블소트(올림차순)
+    for(var i=0; i<rankList.length; i++){
+        for(var j=0; j<rankList.length-1; j++){
+            if(rankList[j].time >rankList[j+1].time){
+                temp = rankList[j];
+                rankList[j] = rankList[j+1];
+                rankList[j+1] = temp; 
+            }
+        }
+    }
+    return rankList;
+}
+
+
+//1위를 맨 위에 띄우는 메서드
+function drawTopRank(rankList){
+    var row = topRank.insertRow(1);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+
+    var minite = parseInt(rankList[0].time / 60);
+    var second = rankList[0].time % 60;
+
+    cell1.innerHTML = "<font class='number'>"+ 1 +"</font>";
+    cell2.innerHTML = "<font class='name'> "+rankList[0].name+"</font><br> "
+                     +"<font class='time'> "+leadingZeros(minite,2)+" : "+leadingZeros(second,2);
+}
+
+
+//랭킹테이블을 그리는 메서드. 6위까지만 띄웁니다.
+function drawTable(rankList){
+    for(var i=0; i< Math.min(rankList.length, 6); i++){
+        var row = rankTable.insertRow(i);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        
+        var minite = parseInt(rankList[i].time / 60);
+        var second = rankList[i].time % 60;
+
+        cell1.innerHTML = "<font class='number'>"+ (i+1) +"</font>";
+        cell2.innerHTML = "<font class='name'> "+rankList[i].name+"</font><br> "
+                         +"<font class='time'> "+leadingZeros(minite,2)+" : "+leadingZeros(second,2);
+    }
+}
+
+
+//숫자를 2자리수로 맞추어 주는 메서드.
+function leadingZeros(n, digits) {
+    var zero = '';
+    n = n.toString();
+
+    if (n.length < digits) {
+    for (var i = 0; i < digits - n.length; i++)
+        zero += '0';
+    }
+    return zero + n;
+}
+
+
+</script>
+</head>
+
+<body>
+
+
+<center>RANKING</center>
+<hr>
+<span>초급</span> 
+<span>중급</span> 
+<span>고급</span>
+<hr>
+
+<table id="topRank" align="center">
+    <tr>
+        <td width="80px"></td>
+        <td>　　　　　　　　　　</td>
+    </tr>  
+</table>
+
+<hr>
+
+<table id="rankTable" align="center">
+    <tr>
+        <td width="80px"></td>
+        <td>　　　　　　　　　　</td>
+    </tr>
+</table>
+
+
+
+</body>
+
+</html>
+
