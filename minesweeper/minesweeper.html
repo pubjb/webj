@@ -284,9 +284,9 @@
                 var isExist = false;
                 for (var i = 0; i < records.length; i++) {
                     if (records[i].name == name) {
+                        isExist = true;
                         if (records[i].sec > sec) {
                             records[i].sec = sec;
-                            isExist = true;
                         }
                     }
                 }
