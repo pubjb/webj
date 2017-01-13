@@ -12,6 +12,7 @@
       @import url(http://fonts.googleapis.com/earlyaccess/nanumgothiccoding.css);
       @import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
       @import url(http://fonts.googleapis.com/earlyaccess/nanumpenscript.css);
+      @import url(http://fonts.googleapis.com/earlyaccess/jejuhallasan.css);
       .hn {font-family: 'Hanna';}
       .nbs {font-family: 'Nanum Brush Script';}
       .ng {font-family: 'Nanum Gothic';}
@@ -24,126 +25,35 @@
 .name      {font-size:35px; color:#222; font-weight:500; font-family:'Nanum Pen Script';}
 .sec       {font-size:33px; color:#555; font-family:'Nanum Pen Script';}
 .list      {position:absolute; margin-top:20px; text-align:center;}
-.rankTable {border-spacing:0px; width:450px}
+.rankTable {border-spacing:0px; width:250px}
+.btn        { font-size:30px; font-family: 'Nanum Pen Script';
+              text-align:center; background:#eed782}
 </style>
 <script>
 
 
-//랭크데이타는 랭크페이지를 열때마다 새로 초기화해서 만드는게 낫겠다.
-/*
-var rank1 = {
-    name:"왕초보",
-    sec:900
-};
-
-var rank2 = {
-    name:"중수",
-    sec:400
-};
-
-var rank3 = {
-    name:"지뢰초보",
-    sec:700
-};
-
-var ranks = [];
-
-ranks.push(rank1);
-ranks.push(rank2);
-
-//localStorage.setItem("2",JSON.stringify(ranks));
-//localStorage.setItem("3",JSON.stringify(ranks));
-
-ranks.push(rank3);
-
-localStorage.setItem("1",JSON.stringify(ranks));
-*/
-/*
-var rank4 = "user,300/";
-var rank1 = "지뢰초보,700/";
-var rank2 = "반장님,300/";
-var rank3 = "팀장님,330/";
-var rank5 = "지뢰고수,400/";
-var rank6 = "일위,200/"
-
-localStorage.easyRankData = "";
-localStorage.normalRankData = "";
-localStorage.hardRankData = "";
-localStorage.easyRankData += rank1;
-localStorage.easyRankData += rank2;
-localStorage.easyRankData += rank3;
-localStorage.easyRankData += rank4;
-localStorage.easyRankData += rank5;
-localStorage.easyRankData += rank6;
-
-localStorage.normalRankData += rank4;
-localStorage.normalRankData += rank5;
-localStorage.normalRankData += rank2;
-데이터 테스트용*/
-
-
-
 window.onload=function(){
-    var easyRankList = [];
-    var normalRankList = [];
-    var hardRankList = [];
+    var easy = JSON.parse(localStorage.getItem("1"));
+    var normal = JSON.parse(localStorage.getItem("2"));
+    var hard = JSON.parse(localStorage.getItem("3"));
 
-    //데이터이름은 easyRankData, normalRankData, hardRankData.
-    drawRankTable(easyRankList, "1");
-    drawRankTable(normalRankList, "2");
-    drawRankTable(hardRankList, "3");
-}
-
-function drawRankTable(rankList, level){
-    rankList = JSON.parse(localStorage.getItem(level));
-    rankList = sortData(rankList);
- // drawTopRank(rankList, level);
-    drawTable(rankList, level);
-}
-
-/*버튼 클릭 메서드
-function loadButtonClick(level) {
-    var rankList = [];
-    var data = level;
-    //데이터이름은 easyRankData, normalRankData, hardRankData.
-    rankList = JSON.parse(localStorage.getItem(data));
-    rankList = sortData(rankList);
-    drawTopRank(rankList);
-    drawTable(rankList);
-}*/
-
-//이하 로컬스토리지에 문자열로 저장했을때 쓰던 메서드. 지금은 안쓴다.
-//로컬스토리지에 있는 데이터를 가져와 자르고
-//rankList에 해당 정보를 넣는 작업을 한다. splitData는 중간역할.
-/*
-function loadRankList(localData){
-    var tempList = [];
-    var splitData = localData.split("/");
-    tempList = inputRankData(tempList, splitData);
-
-    return tempList;
-}
-
-//Rank Data를 rankList에 Push하는 메서드
-function inputRankData(rankList, splitData){
-    for(var i=0; i<splitData.length-1; i++){
-        //마지막에 null데이터가 들어있어서 length-1만큼 반복합니다.
-        var inputData = splitData[i].split(",");
-        var nameData = inputData[0].trim();
-        var secData = inputData[1];
-        var inputRank = {
-            name : nameData,
-            sec : secData
-            };
-        //이 위까지가 rankList에 넣을 데이터를 옮기기 위한 중간역할. 이렇게 해놓고
-        //push로 정보를 넣는다.
-            rankList.push(inputRank);
+    if(easy) {
+        drawTable(sortData(easy), 1);
     }
-    return rankList;
-}
-*/
-//이상 로컬스토리지에 문자열로 저장했을때 쓰던 메서드. 지금은 안쓴다.
+    if(normal) {
+        drawTable(sortData(normal), 2);
+    }
+    if(hard) {
+        drawTable(sortData(hard), 3);
+    }
 
+}
+
+function drawRankTable(rankList, level) {
+        rankList = JSON.parse(localStorage.getItem(level));
+        rankList = sortData(rankList);
+        drawTable(rankList, level);
+}
 
 //버블소트 입니다... ㅎㅎ;;
 function sortData(rankList){
@@ -167,27 +77,6 @@ function sortData(rankList){
 }
 
 
-//1위를 맨 위에 띄우는 메서드
-function drawTopRank(rankList, level){
-    var topRank = document.getElementById("topRank"+level);
-
-/*
-	while(topRank.rows.length > 1){
-		topRank.deleteRow(topRank.rows.length-1);
-	}
-*/
-
-    var row = topRank.insertRow(1);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-
-    var minite = parseInt(rankList[0].sec / 60);
-    var second = rankList[0].sec % 60;
-
-    cell1.innerHTML = "<font class='number'>"+ 1 +"</font>";
-    cell2.innerHTML = "<font class='name'> "+rankList[0].name+"</font><br> "
-                     +"<font class='sec'> "+leadingZeros(minite,2)+" : "+leadingZeros(second,2);
-}
 
 //랭킹테이블을 그리는 메서드. 6위까지만 띄웁니다.
 function drawTable(rankList, level){
@@ -200,7 +89,7 @@ function drawTable(rankList, level){
 */
 
 
-    for(var i=0; i< Math.min(rankList.length, 6); i++){
+    for(var i=0; i< Math.min(rankList.length, 5); i++){
 
         var row = rankTable.insertRow(i+1);
         var cell1 = row.insertCell(0);
@@ -212,8 +101,7 @@ function drawTable(rankList, level){
         cell1.innerHTML = "<font class='number'>"+ (i+1) +"</font>";
         cell2.innerHTML = "<font class='name'> "+rankList[i].name+"</font><br> "
                          +"<font class='sec'> "+leadingZeros(minite,2)+" : "+leadingZeros(second,2);
- //       if(rankList[i].name == localStorage.getItem("name")){
-      if(rankList[i].name == "왕초보"){
+      if(rankList[i].name == localStorage.getItem("name")){
             cell1.bgColor = "#eed782";
             cell2.bgColor = "#eed782";
         }
@@ -233,11 +121,17 @@ function leadingZeros(n, digits) {
     return zero + n;
 }
 
+function move() {
+    document.location.href = "minesweeper.html";
+}
 
 </script>
 </head>
 
 <body>
+<div align="left">
+    <input type="button" class="btn" id="mainMenu" value="이전으로" onclick="move();" style="width:100px; height:40px;" >
+</div>
 
 
 <center class="rank">RANKING</center>
@@ -248,60 +142,42 @@ function leadingZeros(n, digits) {
 <input type="button" id="3"   value="고급"   onclick="loadButtonClick(this.id);">
 <hr>
 -->
-<div class="list" style="left:5%">
+<div class="list" style="left:10%">
 
 <font class="name">초급</font>
 <br><br>
-<table id="topRank1" align="center">
-    <tr>
-        <td width="80px">　　　　　</td>
-        <td>　　　　　　　　　　</td>
-    </tr>  
-</table>
 
 
 <table class="rankTable" id="rankTable1" align="center">
     <tr>
-        <td width="80px">　　　　　</td>
-        <td>　　　　　　　　　　</td>
+        <td width="50px">　　</td>
+        <td>　　　　　　　</td>
     </tr>
 </table>
 
 </div>
 
 
-<div class="list" style="right:36%">
+<div class="list" style="left:42%">
 
 <font class="name">중급</font>
 <br><br>
-<table id="topRank2" align="center">
-    <tr>
-        <td width="80px">　　　　　</td>
-        <td>　　　　　　　　　　</td>
-    </tr>  
-</table>
 
 
 <table class="rankTable"  id="rankTable2" align="center">
     <tr>
-        <td width="80px">　　　　　</td>
-        <td>　　　　　　　　　　</td>
+        <td width="50px">　　</td>
+        <td>　　　　　　　</td>
     </tr>
 </table>
 
 </div>
 
 
-<div class="list" style="right:5%">
+<div class="list" style="left:75%">
 
 <font class="name">고급</font>
-<br><br>    
-<table id="topRank3" align="center">
-    <tr>
-        <td width="80px">　　　　　</td>
-        <td>　　　　　　　　　　</td>
-    </tr>  
-</table>
+<br><br>   
 
 
 <table class="rankTable"  id="rankTable3" align="center">

@@ -6,6 +6,7 @@
 
     <style>
     @import url(http://fonts.googleapis.com/earlyaccess/jejuhallasan.css);
+    @import url(http://fonts.googleapis.com/earlyaccess/nanumpenscript.css);
     .block {
         width:30px;
         height:30px;
@@ -74,19 +75,21 @@
         case "level1":
             rowNum = 9;
             colNum = 9;
-            mineCount = 10;
+            mineCount = 1;
             currentLevel = 1;
             break;
         case "level2":
             rowNum = 16;
             colNum = 16;
-            mineCount = 40;
+            mineCount = 1;
+            //mineCount = 40;
             currentLevel = 2;
             break;
         case "level3":
             rowNum = 16;
             colNum = 30;
-            mineCount = 99;
+            //mineCount = 99;
+            mineCount = 1;
             currentLevel = 3;
             break;
         default:
@@ -306,7 +309,8 @@
                 localStorage.setItem("" + currentLevel, JSON.stringify(records));
             }
 
-            document.location.href="test.html";
+            localStorage.setItem("name", name);
+            document.location.href="ranking.html";
         }
     }
 
