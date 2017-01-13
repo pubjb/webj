@@ -192,8 +192,8 @@
 
         document.getElementById("mineMap").innerHTML = html;
 
-        document.getElementById("time").innerHTML = 0;
-        document.getElementById("mineCount").innerHTML = mineCount;
+        document.getElementById("time").innerHTML = "<font color='white'>" + 0 + "</font>";
+        document.getElementById("mineCount").innerHTML = "<font color='white'>" + mineCount + "</font>";
     }
 
 
@@ -208,7 +208,7 @@
             isStarted = true;
             interval = setInterval(function() {
                 sec++;
-                time.innerHTML = sec;
+                time.innerHTML = "<font color='white'>" + sec + "</font>";
             }, 1000);
         }
 
@@ -343,7 +343,7 @@
                 console.log("blockCount : " + blockCount);
             }
 
-            document.getElementById("mineCount").innerHTML = userMineCount;
+            document.getElementById("mineCount").innerHTML = "<font color='white'>" + userMineCount + "</font>";
         } // 오른클릭
         // 훨버튼
         else if (event.button == 1) {
@@ -394,13 +394,14 @@
     </script>
 </head>
 <body>
+    <br>
     <div id="menu" align="center">
         <input type="button" id="level1" value="초급" class="btn" onclick="selectLevel(this.id);">
         <input type="button" id="level2" value="중급" class="btn" onclick="selectLevel(this.id);">
         <input type="button" id="level3" value="고급" class="btn" onclick="selectLevel(this.id);">
     </div>
 
-    <br><br><br>
+    <br><br>
 
     <table border="5" cellspacing="10" align="center">
         <tr>
