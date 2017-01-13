@@ -21,13 +21,13 @@
       .nps {font-family: 'Nanum Pen Script';}
 
 .rank      {font-size:60px; font-family: 'Nanum Pen Script';}
-.number    {font-size:70px; font-family: 'Nanum Pen Script';}
-.name      {font-size:35px; color:#222; font-weight:500; font-family:'Nanum Pen Script';}
-.sec       {font-size:33px; color:#555; font-family:'Nanum Pen Script';}
+.number    {font-size:70px; color:white; font-family: 'Nanum Pen Script';}
+.name      {font-size:35px; color:white; font-weight:500; font-family:'Nanum Pen Script';}
+.sec       {font-size:33px; color:white; font-family:'Nanum Pen Script';}
 .list      {position:absolute; margin-top:20px; text-align:center;}
 .rankTable {border-spacing:0px; width:250px}
 .btn        { font-size:30px; font-family: 'Nanum Pen Script';
-              text-align:center; background:#eed782}
+              color: white; text-align:center; background:#333333}
 </style>
 <script>
 
@@ -102,8 +102,10 @@ function drawTable(rankList, level){
         cell2.innerHTML = "<font class='name'> "+rankList[i].name+"</font><br> "
                          +"<font class='sec'> "+leadingZeros(minite,2)+" : "+leadingZeros(second,2);
       if(rankList[i].name == localStorage.getItem("name")){
-            cell1.bgColor = "#eed782";
-            cell2.bgColor = "#eed782";
+            cell1.bgColor = "#333333";
+            cell1.color = "#000000";
+            cell2.bgColor = "#333333";
+            cell2.color = "#FFFFFF";
         }
     }
 }
@@ -130,7 +132,7 @@ function move() {
 
 <body>
 <div align="left">
-    <input type="button" class="btn" id="mainMenu" value="이전으로" onclick="move();" style="width:100px; height:40px;" >
+    <input type="button" class="btn" id="mainMenu" value="게임화면" onclick="move();" style="width:100px; height:40px;" >
 </div>
 
 

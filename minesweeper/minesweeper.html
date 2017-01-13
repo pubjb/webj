@@ -277,7 +277,7 @@
             isEnded = true;
             clearInterval(interval);
 
-            var name = prompt("와우!! " + sec + "초를 기록하셨습니다~ \n영웅의 이름을 넣어주세요", "아무개");
+            var name = prompt("와우!! " + sec + " 초를 기록하셨습니다~ \n영웅의 이름을 입력해주세요", "아무개");
             var records = JSON.parse(localStorage.getItem("" + currentLevel));
 
             if (records) {
