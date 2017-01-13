@@ -47,6 +47,26 @@
         border-style: outset;
         background-color:#333333;
     }
+    .timefont{
+   		display:inline-block; 
+   		width:100px;
+   		background-color:black; 
+   		border-width:6px; 
+   		border-style:outset; 
+   		border-color:black;
+   		opacity: 0.6; 
+   		border-radius: 7px;"
+   	}
+   	.mineCnt{
+   	   	display:inline-block; 
+   		width:70px;
+   		background-color:black; 
+   		border-width:6px; 
+   		border-style:outset; 
+   		border-color:black;
+   		opacity: 0.6; 
+   		border-radius: 7px;"
+   	}
     </style>
 
     <script>
@@ -75,21 +95,19 @@
         case "level1":
             rowNum = 9;
             colNum = 9;
-            mineCount = 1;
+            mineCount = 9;
             currentLevel = 1;
             break;
         case "level2":
             rowNum = 16;
             colNum = 16;
-            mineCount = 1;
-            //mineCount = 40;
+            mineCount = 40;
             currentLevel = 2;
             break;
         case "level3":
             rowNum = 16;
             colNum = 30;
-            //mineCount = 99;
-            mineCount = 1;
+            mineCount = 99;
             currentLevel = 3;
             break;
         default:
@@ -101,8 +119,33 @@
         }
 
         reset();
+        background();
     }
+    
+  	
+    var cnt=0;
+    function background(){
 
+    	var imgArray = [];	
+        	imgArray[0]="../imgs/1.jpg";
+        	imgArray[1]="../imgs/2.gif";
+        	imgArray[2]="../imgs/3.jpg";
+        	imgArray[3]="../imgs/4.jpg";
+        	imgArray[4]="../imgs/5.jpg";
+        	imgArray[5]="../imgs/6.gif";
+        	imgArray[6]="../imgs/7.jpg";
+        	imgArray[7]="../imgs/8.jpg";
+        	imgArray[8]="../imgs/9.jpg";
+        	imgArray[9]="../imgs/10.jpg";
+        	imgArray[10]="../imgs/11.jpg";
+        	imgArray[11]="../imgs/12.jpg";
+        	imgArray[12]="../imgs/13.jpg";
+        	if(cnt==imgArray.length) cnt=0;
+ 
+        var rand= Math.floor(Math.random()*imgArray.length);
+        	document.body.style = "background: url("+imgArray[cnt]+") no-repeat center fixed ; background-size: cover;";	
+        	cnt++;
+     }
 
     function reset() {
         sec = 0;
@@ -192,11 +235,21 @@
 
         document.getElementById("mineMap").innerHTML = html;
 
-        document.getElementById("time").innerHTML = "<font color='white'>" + 0 + "</font>";
-        document.getElementById("mineCount").innerHTML = "<font color='white'>" + mineCount + "</font>";
+        document.getElementById("time").innerHTML = "<font color='white' size = '5px'><b>  00:00 </b></font>";
+        document.getElementById("mineCount").innerHTML = "<font color='white' size = '5px'><b>" + mineCount + "</b></font>";
     }
 
+ 	// 타이머
+    function leadingZeros(n, digits) {
+	    var zero = '';
+	    n = n.toString();
 
+	    if (n.length < digits) {
+	    for (var i = 0; i < digits - n.length; i++)
+	        zero += '0';
+	    }
+	    return zero + n;
+	}
     function leftClick(id) {
         var button = document.getElementById(id);
         var coord = id.split(",");
@@ -208,7 +261,7 @@
             isStarted = true;
             interval = setInterval(function() {
                 sec++;
-                time.innerHTML = "<font color='white'>" + sec + "</font>";
+                time.innerHTML = "<font color='white' size = '5px'><b>" +leadingZeros(parseInt(sec/60),2)+":"+leadingZeros(parseInt(sec%60),2); + "</b></font>";
             }, 1000);
         }
 
@@ -343,7 +396,7 @@
                 console.log("blockCount : " + blockCount);
             }
 
-            document.getElementById("mineCount").innerHTML = "<font color='white'>" + userMineCount + "</font>";
+            document.getElementById("mineCount").innerHTML = "<font color='white' size = '5px'><b>" + userMineCount + "</b></font>";
         } // 오른클릭
         // 훨버튼
         else if (event.button == 1) {
@@ -405,15 +458,15 @@
 
     <table border="5" cellspacing="10" align="center">
         <tr>
-            <td><div id="mineMap"></div></td>
+            <td><div id="mineMap" ></div></td>
         </tr>
     </table>
 
     <br>
     <table align="center" width="300px">
         <tr>
-            <td><img src="../imgs/clock.png" width="20px" height="20px">&nbsp;&nbsp;&nbsp;<span id="time"></span></td>
-            <td align="right"><img src="../imgs/mine.jpg" width="20px" height="20px">&nbsp;&nbsp;&nbsp;<span id="mineCount"></span></td>
+            <td><img src="../imgs/clock.png" width="20px" height="20px">&nbsp;&nbsp;&nbsp;<span id="time" class="timefont" align="center"></span></td>
+            <td align="right"><img src="../imgs/mine.jpg" width="20px" height="20px">&nbsp;&nbsp;&nbsp;<span id="mineCount" class="mineCnt" align="center"></span></td>
         </tr>
     </table>
     
