@@ -21,13 +21,20 @@
       .nps {font-family: 'Nanum Pen Script';}
 
 .rank      {font-size:60px; font-family: 'Nanum Pen Script';}
-.number    {font-size:70px; color:white; font-family: 'Nanum Pen Script';}
-.name      {font-size:35px; color:white; font-weight:500; font-family:'Nanum Pen Script';}
-.sec       {font-size:33px; color:white; font-family:'Nanum Pen Script';}
+.number    {font-size:70px; color:#333; font-family: 'Nanum Pen Script';}
+.name      {font-size:35px; color:#333; font-weight:500; font-family:'Nanum Pen Script';}
+.sec       {font-size:33px; color:#333; font-family:'Nanum Pen Script';}
+
+.topNumber    {font-size:70px; color:white; font-family: 'Nanum Pen Script';}
+.topName      {font-size:35px; color:white; font-weight:500; font-family:'Nanum Pen Script';}
+.topSec       {font-size:33px; color:white; font-family:'Nanum Pen Script';}
+
 .list      {position:absolute; margin-top:20px; text-align:center;}
 .rankTable {border-spacing:0px; width:250px}
 .btn        { font-size:30px; font-family: 'Nanum Pen Script';
               color: white; text-align:center; background:#333333}
+
+
 </style>
 <script>
 
@@ -101,12 +108,15 @@ function drawTable(rankList, level){
         cell1.innerHTML = "<font class='number'>"+ (i+1) +"</font>";
         cell2.innerHTML = "<font class='name'> "+rankList[i].name+"</font><br> "
                          +"<font class='sec'> "+leadingZeros(minite,2)+" : "+leadingZeros(second,2);
-      if(rankList[i].name == localStorage.getItem("name")){
+
+        if(rankList[i].name == localStorage.getItem("name")){
             cell1.bgColor = "#333333";
             cell1.color = "#000000";
-            cell2.bgColor = "#333333";
-            cell2.color = "#FFFFFF";
+            cell2.style = "border:2px solid #333333;";
+            cell1.innerHTML = "<font class='topNumber'>"+ (i+1) +"</font>";
+
         }
+        
     }
 }
 
